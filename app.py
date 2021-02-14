@@ -19,9 +19,9 @@ def main():
     execute the requested commands appropriately
     """
 
-    parser = argparse.ArgumentParser(description='Manage Hitron CODA-4589 via web interface.')
-    parser.add_argument('command', help='The command to execute. See ReadMe for list of supported commands')
-    parser.add_argument('-c', '--config-file', default=f'{Path.home()}/routerCredentials.txt', help='Config file to read credentials from. Defaults to ~/routerCredentials.txt')
+    parser = argparse.ArgumentParser(description='Manage Hitron CODA-4589 via the command line.')
+    parser.add_argument('command', help='The command to execute. See the README for list of supported commands')
+    parser.add_argument('-c', '--config-file', default=f'{Path.home()}/.routerCredentials', help='Config file to read credentials from. Defaults to ~/.routerCredentials')
     parser.add_argument('-d', '--dry-run', action='store_true', help='Run the command without effect')
     parser.add_argument('--driver-path', default=f'{Path.home()}/chromedriver', help='Path to the chromedriver to use. Defaults to ~/chromedriver')
     parser.add_argument('-f', '--log-file', help='File to log output to. Defaults to standard error')
