@@ -108,5 +108,9 @@ def dispatchCommand(command, controller, dryRun):
 
     if command.lower() == 'restart':
         controller.restart(dryRun)
+
+    elif command.lower() == 'login':
+        controller.login()
+        
     else:
         raise UnknownCommandException()

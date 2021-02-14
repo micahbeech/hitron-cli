@@ -91,9 +91,75 @@ class RouterController():
 
         logger.debug('Created RouterController')
 
-        
 
-    def __login(self, driver, logger):
+    def login(self):
+        """ Logs in to the router/modem's GUI """
+
+        logger = logging.getLogger('RouterController.Login')
+
+        driver = self.__launchDriver(logger)
+
+        try:
+            self.__doLogin(driver, logger)
+        except InteractionException as e:
+            # Sometimes the page navigates past the login page before the login failed element is found
+            # so if that is the reason for failure we still logged in, just ignore the exception
+            if 'Login_Failed' not in e.message:
+                logger.error(e.message)
+                driver.quit()
+                return
+        
+        logger.info('Successfully logged into the router/modem`s GUI')
+        driver.quit()
+
+
+    def restart(self, dryRun=False):
+        """
+        Restarts the router/modem
+
+        If argument `dryRun` is passed in, the operation is attempted
+        but not actually executed.
+
+        Parameters
+        ----------
+        dryRun : bool
+            Whether or not to actually restart the router/modem (default is False)
+        """
+
+        logger = logging.getLogger('RouterController.Restart')
+
+        driver = self.__launchDriver(logger)
+
+        try:
+            self.__doLogin(driver, logger)
+        except InteractionException as e:
+            # Sometimes the page navigates past the login page before the login failed element is found
+            # so if that is the reason for failure we still logged in, just ignore the exception
+            if 'Login_Failed' not in e.message:
+                logger.error(e.message)
+                driver.quit()
+                return
+
+        logger.info(f'Logged in to {self.rootUrl}')
+
+        try:
+            self.__doRestart(driver, dryRun, logger)
+        except InteractionException as e:
+            logger.error(e.message)
+        finally:
+            driver.quit()
+
+
+    def __launchDriver(self, logger):
+        """ Launch webdriver for router/modem's GUI and return it """
+
+        driver = webdriver.Chrome(self.driverPath, desired_capabilities=self.driverCapabilities)
+        driver.get(self.rootUrl)
+        logger.debug('Opened %s', self.rootUrl)
+        return driver
+
+
+    def __doLogin(self, driver, logger):
         """ Login to the router/modem's GUI """
 
         usernameInput = WebHelper.safeFind(driver.find_element_by_id, 'user_login')
@@ -114,6 +180,7 @@ class RouterController():
 
         if loginFailure.is_displayed():
             raise InteractionException('Login failed. Please check your credentials and try again.')
+
 
     def __doRestart(self, driver, dryRun, logger):
         """ Restart the router/modem's GUI """
@@ -141,42 +208,3 @@ class RouterController():
         else:
             WebHelper.safeInteract(confirmation.accept)
             logger.debug('Confirmed reboot. The router/modem should be restarting now')
-
-
-    def restart(self, dryRun=False):
-        """
-        Restarts the router/modem
-
-        If argument `dryRun` is passed in, the operation is attempted
-        but not actually executed.
-
-        Parameters
-        ----------
-        dryRun : bool
-            Whether or not to actually restart the router/modem (default is False)
-        """
-
-        loginLogger = logging.getLogger('RouterController.Login')
-        restartLogger = logging.getLogger('RouterController.Restart')
-
-        driver = webdriver.Chrome(self.driverPath, desired_capabilities=self.driverCapabilities)
-        driver.get(self.rootUrl)
-        restartLogger.debug('Opened %s', self.rootUrl)
-
-        try:
-            self.__login(driver, loginLogger)
-        except InteractionException as e:
-            # Sometimes the page navigates past the login page before the login failed element is found
-            # so if that is the reason for failure, we still logged in, just ignore the exception
-            if 'Login_Failed' not in e.message:
-                loginLogger.error(e.message)
-                driver.quit()
-                return
-
-        try:
-            self.__doRestart(driver, dryRun, restartLogger)
-        except InteractionException as e:
-            restartLogger.error(e.message)
-        finally:
-            driver.quit()
-
