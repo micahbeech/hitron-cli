@@ -14,8 +14,7 @@ On this page:
     - [Positional Arguments](#positional-arguments)
     - [Optional Arguments](#optional-arguments)
 - [Examples](#examples)
-
-&nbsp;
+- [Scheduling](#scheduling)
 
 ## Prerequisites
 
@@ -30,8 +29,6 @@ On this page:
     - The tool uses Chromedriver as the webdriver for Selenium. To use this, you must have both Google Chrome (the browser) and a version of chromedriver installed. 
     - You can download Chromedriver from [this](https://chromedriver.chromium.org) website. Make sure to download the correct version for your installation of Chrome and your OS.
     - Place the driver in your home directory (the tool looks for the file ~/chromedriver). If you prefer, there is an option to specify a different path at runtime, discussed in [Usage](#optional-arguments).
-
-&nbsp;
 
 ## Setup
 
@@ -82,8 +79,6 @@ where `<NEW LEVEL>` is one of `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. I
 
 By default the tool logs to standard error, but can log to a file specified using the `-f` option which is discussed in [Optional Arguments](#optional-arguments).
 
-&nbsp;
-
 ## Usage
 
 Run the tool by executing
@@ -114,8 +109,6 @@ Option | Effect
 -p PASSWORD, --password PASSWORD | Specify the password with which to login to the modem's GUI. Use of the -p option overrides any password provided by a configuration file
 -u USERNAME, --username USERNAME | Specify the username with which to login to the modem's GUI. Use of the -u option overrides any username provided by a configuration file
 
-&nbsp;
-
 ## Examples
 ```
 ./hitron restart
@@ -126,8 +119,6 @@ The tool will read credentials from `~/.routerCredentials` and use these to log 
 ./hitron restart -H -d -c creds.txt -f hitron.log -u sharon
 ```
 The tool will use IP address and password from `creds.txt` and username `sharon` to log into the GUI, which will run without opening on the screen. It will do a dry restart, and log its results to `hitron.log`.
-
-&nbsp;
 
 ## Scheduling
 You may which to run the `restart` command on a schedule in order to keep your modem running well. I did this using a CRON job in the following format:
