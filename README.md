@@ -2,7 +2,7 @@
 
 This tool is intended for use with the Hitron CODA-4589 Cable Modem Router. The tool interacts with the modem via its web GUI, accessed using its internal IP address.
 
-The idea of the tool is to be able to automate tasks that you might not be able to otherwise. I use it to regularly reboot my modem every 24 hours.
+The idea of the tool is to be able to automate tasks that you might not be able to otherwise. I use it to reboot my modem every 24 hours.
 
 On this page:
 - [Prerequisites](#prerequisites)
@@ -28,7 +28,7 @@ On this page:
     - If you don't have Selenium installed, install it using `pip install -U Selenium`. See [https://pythonspot.com/selenium-install/](https://pythonspot.com/selenium-install/) for more details.
 - Google Chrome and Chromedriver
     - The tool uses Chromedriver as the webdriver for Selenium. To use this, you must have both Google Chrome (the browser) and a version of chromedriver installed. 
-    - You can download Chromedriver from [this](https://chromedriver.chromium.org) website. Make sure to download the correct version for Chrome and your OS.
+    - You can download Chromedriver from [this](https://chromedriver.chromium.org) website. Make sure to download the correct version for your installation of Chrome and your OS.
     - Place the driver in your home directory (the tool looks for the file ~/chromedriver). If you prefer, there is an option to specify a different path at runtime, discussed in [Usage](#optional-arguments).
 
 &nbsp;
@@ -40,7 +40,7 @@ The tool should be useable out of the box, although depending on what version of
 ```
 #!/Library/Frameworks/Python.framework/Versions/3.7/bin/python3
 ```
-For example, a common alternative might be
+A common alternative might be
 ```
 #!/usr/bin/python
 ```
@@ -62,7 +62,7 @@ Username | cusadmin
 Password | password
 
 ### Logging
-By default, the tool logs at INFO level. If you wish to change this (e.g. to DEBUG), modify
+By default the tool logs at INFO level. If you wish to change this (e.g. to DEBUG), modify
 ```
 logging.basicConfig(
     ...
@@ -80,7 +80,7 @@ logging.basicConfig(
 ```
 where `<NEW LEVEL>` is one of `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. I may add an option to set the log level at runtime in the future.
 
-By default, the tool logs to standard error, but can log to a file specified using the `-f` option, discussed in [Optional Arguments](#optional-arguments).
+By default the tool logs to standard error, but can log to a file specified using the `-f` option which is discussed in [Optional Arguments](#optional-arguments).
 
 &nbsp;
 
@@ -94,7 +94,7 @@ Run the tool by executing
 ### Positional Arguments
 - command
     - The command you want to execute. Currently, the supported commands are:
-
+    
     Command | Effect
     --- | ---
     login | Logs in to the modem/router's GUI. This is useful to test if you have your credentials set up correctly before executing any meaningful commands
@@ -132,5 +132,5 @@ The tool will use IP address and password from `creds.txt` and username `sharon`
 ## Scheduling
 You may which to run the `restart` command on a schedule in order to keep your modem running well. I did this using a CRON job in the following format:
 ```
-0 4 * * * /path/to/hitron restart
+0 4 * * * /path/to/hitron restart -H -f logfile.log
 ```
